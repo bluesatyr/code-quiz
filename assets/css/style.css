@@ -69,7 +69,11 @@ header {
     margin-top: 15px;
     padding-top: 10px;
     color: #fff;
-    text-align: center;
+}
+
+.option-list-item {
+    text-align: left;
+    padding-left: 20px;
 }
 
 .option-list-item:hover, #start:hover {

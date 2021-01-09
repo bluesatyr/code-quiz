@@ -11,7 +11,7 @@ var questions = {
     q1 : {question: "Commonly used data types do not include:", options: ["strings", "booleans", "numbers", "alerts"], answer: "alerts"},
     q2 : {question: "The condition in if/else statements is enclosed inside _______.", options: ["square brackets", "parenthesis", "curly brackets", "quotes"], answer: "parenthesis"},
     q3 : {question: "Arrays in JavaScript can be used to store ______.", options: ["numbers & strings", "other arrays", "booleans", "all of the above"], answer: "all of the above"},
-    q4 : {question: "String values must be enclosed within _______ when being assigned to variables", options: ["commas", "curly brackets", "quotes", "parenthesis"], answer: "quotes"},
+    q4 : {question: "String values must be enclosed within _______ when being assigned to variables.", options: ["commas", "curly brackets", "quotes", "parenthesis"], answer: "quotes"},
     q5 : {question: "A very useful tool for development and debugging for printing content to the debugger is:", options: ["JavaScript", "terminal/bash", "for loops", "console.log"], answer: "console.log"},
 };
 
@@ -21,7 +21,7 @@ var createIntro = function () {
     intro.innerHTML = "<div class='intro'><h1 class='title'>Coding Quiz Challenge</h1><p>"+introText+"</p><button id='start'>Start Quiz</button></div>";
     
     // listen for start button click then start the game
-    document.querySelector('#start').on('click', startGame);
+    document.querySelector('#start').addEventListener('click', startQuiz);
 }
 
 // make a `keys array` of questions object keys
@@ -68,41 +68,44 @@ var createQuestionEl = function(arr, randArr, index) {
     qTextEl.textContent = questionText;
     
     // create option buttons in a for loop
-    for (var i = 0 ; i < 5; i++) {
+    for (var i = 0 ; i < 4; i++) {
         createButtonEl(questionKey, i);
     }
 };
 
+
 var startQuiz = function() {
     var questionNumber = 1;
-    
+    var questionArray = Object.keys(questions);
+    console.log(questionArray);
     var randQuestions = randomize(questionArray);
+    console.log(randQuestions);
     
-    startTimer();
-    // Loop through questions one by one
-    for (var i = 0; i < questions.length; i++){
-        //questions.q1.question
+    createQuestionEl(questions, randQuestions, 2);
+     var startTimer = setInterval(function() {
+      if (timer > 1){
+          timerEl.textContent = timer; 
+          timer--;
+      } else if (timer === 1){
+          timerEl.textContent = timer;
+          timer--;
+      } else {
+          timerEl.textContent = ""; //change to say time is up
+          clearInterval(startTimer); // stop the timer
+          //displayMessage();
+          // stop the timer
+          // Call a function to make timer the final score     
+      }
+    }, 1000);
+    
+    
+    /* Loop through questions one by one
+    for (var i = 0; i < questions.length; i++) {
         createQuestionEl(questions, randQuestions, i);
         // createOptionEls
-        
         questionNumber++;
-    }
+    } */
 }
 
-// begin countdown
-var startTimer = setInterval(function() {
-    if (timer > 1){
-        timerEl.textContent = timer; 
-        timer--;
-    } else if (timer === 1){
-        timerEl.textContent = timer;
-        timer--;
-    } else {
-        timerEl.textContent = ""; //change to say time is up
-        clearInterval(startTimer); // stop the timer
-        //displayMessage();
-        // stop the timer
-        // Call a function to make timer the final score     
-    }
-  }, 1000);
+
 
