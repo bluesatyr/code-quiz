@@ -73,3 +73,36 @@ var createQuestionEl = function(arr, randArr, index) {
     }
 };
 
+var startQuiz = function() {
+    var questionNumber = 1;
+    
+    var randQuestions = randomize(questionArray);
+    
+    startTimer();
+    // Loop through questions one by one
+    for (var i = 0; i < questions.length; i++){
+        //questions.q1.question
+        createQuestionEl(questions, randQuestions, i);
+        // createOptionEls
+        
+        questionNumber++;
+    }
+}
+
+// begin countdown
+var startTimer = setInterval(function() {
+    if (timer > 1){
+        timerEl.textContent = timer; 
+        timer--;
+    } else if (timer === 1){
+        timerEl.textContent = timer;
+        timer--;
+    } else {
+        timerEl.textContent = ""; //change to say time is up
+        clearInterval(startTimer); // stop the timer
+        //displayMessage();
+        // stop the timer
+        // Call a function to make timer the final score     
+    }
+  }, 1000);
+
