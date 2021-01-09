@@ -1,5 +1,4 @@
 // Declare global variables
-var highScore = 0;
 var questionNumber = 1;
 var currentQuestion = document.querySelector('.current-question');
 var timer = 75;
@@ -68,13 +67,30 @@ var result = function(clicked) {
 // create final results view
 var finalResults = function (score) {
     var intro = document.querySelector('.game-wrapper');
-    intro.innerHTML = "<div class='intro'><h1 class='title'>Coding Quiz Challenge</h1><p>You have completed the Quiz! Your Score is " + score + "</p><button id=''>Start Quiz</button></div>";
+    intro.innerHTML = "<div class='intro'><h1 class='title'>Coding Quiz Challenge</h1><p>You have completed the Quiz! Your Score is " + score + "</p><button id='log-score'>Submit</button></div>";
     
+    // label for input: 'Enter your initials'
     
+    // input field
 }
 
+// High Scores - list,from localStoarage, go back button , clear high scores button.
 
+// highScores = [['SE', 22]]
+// 1. SE - 22
 
+var renderScores = function() {
+    var scoreboard = document.querySelector('.game-wrapper');
+    scoreboard.innerHTML = "<div class='scoreboard'><h2>High Scores</h2><ul class='score-list'></ul></div>";
+    var highScores = JSON.parse(localStorage.getItem('high-scores'));
+    var scoreList = document.querySelector('score-list');
+    for (var i = 0; i < highScores.length; i++){
+        var entry = document.createElement('li');
+        entry.className = "scoreboard-item"
+        entry.textContent = (i + 1) + ". " highScores[i][0] + " - " + highScores[i][1];
+        scoreList.appendChild(entry);
+    }
+}
 
 // create questionEl
 var createQuestionEl = function(arr, randArr, index) {
@@ -136,7 +152,7 @@ var createQuestionEl = function(arr, randArr, index) {
             else {
                 questionNumber++;
                 if (questionNumber >= 6) {
-                    var score = timer;
+                    var score = (timer-= 10);
                     finalResults(score); // function to display results and add player to scoreboard
                 }
                 else {
@@ -148,15 +164,8 @@ var createQuestionEl = function(arr, randArr, index) {
     });
 };
 
-// wrapper for createQuestionEl to be called within other functions
-/*
-var renderQuestions = function (randQuestions) {
-        createQuestionEl(questions, randQuestions, (questionNumber - 1));
-} 
-*/
 
-// divide into two functions: one to create flow of the game and the other to render the questions??
-
+// start the quiz
 var startQuiz = function() {
     var questionNumber = 1;
     var questionArray = Object.keys(questions);
