@@ -47,6 +47,7 @@ var createButtonEl = function(key, index) {
     var button = document.createElement('li');
     button.className = "option-list-item";
     var answer = questions[key]['options'][index];
+    // data attribute of answer?
     button.textContent = (index+1) + ". " + answer;
     optionList.appendChild(button);
 }
@@ -73,6 +74,14 @@ var createQuestionEl = function(arr, randArr, index) {
     }
 };
 
+var renderQuestions = function (randQuestions) {
+        createQuestionEl(questions, randQuestions, (questionNumber - 1));
+        // create event listeners for the buttons
+        // increase question number
+        // on click render new question
+        // check answer and display result
+}
+// divide into two functions: one to create flow of the game and the other to render the questions
 
 var startQuiz = function() {
     var questionNumber = 1;
@@ -81,7 +90,8 @@ var startQuiz = function() {
     var randQuestions = randomize(questionArray);
     console.log(randQuestions);
     
-    createQuestionEl(questions, randQuestions, 2);
+    renderQuestions(randQuestions);
+         
      var startTimer = setInterval(function() {
       if (timer > 1){
           timerEl.textContent = timer; 
@@ -90,6 +100,7 @@ var startQuiz = function() {
           timerEl.textContent = timer;
           timer--;
       } else {
+          window.alert('Time is up!!');
           timerEl.textContent = ""; //change to say time is up
           clearInterval(startTimer); // stop the timer
           //displayMessage();
@@ -97,6 +108,8 @@ var startQuiz = function() {
           // Call a function to make timer the final score     
       }
     }, 1000);
+    
+    
     
     
     /* Loop through questions one by one
