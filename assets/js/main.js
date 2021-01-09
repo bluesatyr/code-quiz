@@ -5,6 +5,7 @@ var questionNumber = 1;
 var currentQuestion = document.querySelector('.current-question');
 var timer = 75
 var timerEl = document.querySelector('.time');
+var rightWrong = "";
 var introText = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!"
 
 var questions = {
@@ -48,20 +49,42 @@ var createButtonEl = function(key, index) {
     button.className = "option-list-item";
     var answer = questions[key]['options'][index];
     // data attribute of answer?
-    button.textContent = (index+1) + ". " + answer;
+    var buttonText = (index+1) + ". ";
+    button.innerHTML = buttonText + "<span class='option-value'>" + answer + "</span";
     optionList.appendChild(button);
 }
 
+var result = function(clicked) {
+    if (clicked === "wrong") {
+        var resultDiv = document.querySelector('.previous-result')
+        resultDiv.innerHTML = "";
+        var resultEl = document.createElement('div');
+        resultEl.className = "incorrect";
+        resultEl.innerHTML = "<hr><h3>Incorrect!</h3>";
+        timer-=10;
+        resultDiv.appendChild(resultEl);
+        
+    }
+    else if (clicked === "right"){
+        var resultDiv = document.querySelector('.previous-result')
+        resultDiv.innerHTML = "";
+        var resultEl = document.createElement('div');
+        resultEl.className = "correct";
+        resultEl.innerHTML = "<hr><h3>Correct!</h3>";
+        resultDiv.appendChild(resultEl);
+    }
+}
 
 // create questionEl
 var createQuestionEl = function(arr, randArr, index) {
     // create the quiz elements
     document.querySelector('.game-wrapper').innerHTML= 
-        "<div class='current-question'><h3 class='question-number'></h3><p class='question-text'></p><div class='options'><ul class='option-list'></ul></div></div>";    
+        "<div class='current-question'><h3 class='question-number'></h3><p class='question-text'></p><div class='options'><ul class='option-list'></ul></div></div><div class='previous-result'></div>";    
     // select question-number class       
     var questionNum = document.querySelector('.question-number');
     // set question-number text content
     questionNum.textContent = "Question: " + questionNumber;
+    
     
     var questionKey = randArr[index];
     var questionText =  questions[questionKey]['question'];
@@ -70,16 +93,41 @@ var createQuestionEl = function(arr, randArr, index) {
     
     // create option buttons in a for loop
     for (var i = 0 ; i < 4; i++) {
-        createButtonEl(questionKey, i);
+        createButtonEl(questionKey, i); 
+    };
+    
+    if (rightWrong === "right") {
+        result("right");
     }
+    else if (rightWrong === "wrong") {
+        result("wrong");
+    }
+    
+    var options = document.querySelector(".options");
+    options.addEventListener("click", function(event) {
+        var listEl = event.target.closest(".option-value");
+        console.log(listEl);
+        
+        var answer = questions[questionKey]['answer'];
+        
+        console.log(answer);
+        if (listEl.textContent === answer) {
+            questionNumber++;
+            rightWrong = "right";
+            createQuestionEl(questions, randArr, (questionNumber - 1));
+            
+        }
+        else {
+            questionNumber++;
+            rightWrong = "wrong";
+            createQuestionEl(questions, randArr, (questionNumber - 1));
+        }
+        
+    });
 };
 
 var renderQuestions = function (randQuestions) {
         createQuestionEl(questions, randQuestions, (questionNumber - 1));
-        // create event listeners for the buttons
-        // increase question number
-        // on click render new question
-        // check answer and display result
 }
 // divide into two functions: one to create flow of the game and the other to render the questions
 
