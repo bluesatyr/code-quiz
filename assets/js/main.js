@@ -4,7 +4,7 @@ var currentQuestion = document.querySelector('.current-question');
 var timer = 75;
 var timerEl = document.querySelector('.time');
 var rightWrong = "";
-
+var score = 0;
 
 var questions = {
     q1 : {question: "Commonly used data types do not include:", options: ["strings", "booleans", "numbers", "alerts"], answer: "alerts"},
@@ -34,7 +34,7 @@ var randomize = function(array){
 var createButtonEl = function(key, index) {
     var optionList = document.querySelector('.option-list');
     var button = document.createElement('li');
-    button.className = "option-list-item";
+    button.className = "option-list-item btn";
     var answer = questions[key]['options'][index];
     // data attribute of answer?
     var buttonText = (index+1) + ". ";
@@ -64,17 +64,34 @@ var result = function(clicked) {
     }
 };
 
+var scoreFormHandler = function(event){
+    console.log(event);
+    event.preventDefault();
+    var highScores = JSON.parse(localStorage.getItem('high-scores'));
+    console.log(highScores);
+    if (!highScores) {
+        highScores = [];
+    };
+    console.log(highScores);
+    var myScore = score;
+    var scoreNameInput = document.querySelector("input[name='player-name']").value;
+    
+    var scoreEntry = [scoreNameInput, myScore];
+    highScores.push(scoreEntry);
+    localStorage.setItem('high-scores', JSON.stringify(highScores));
+};
+
 // create final results view
 var finalResults = function (score) {
     var intro = document.querySelector('.game-wrapper');
-    intro.innerHTML = "<div class='intro'><h1 class='title'>Coding Quiz Challenge</h1><p>You have completed the Quiz! Your Score is " + score + "</p><button id='log-score'>Submit</button></div>";
+    intro.innerHTML = "<div class='intro'><h1 class='title'>Coding Quiz Challenge</h1><p>You have completed the Quiz! Your Score is " + score + "</p><input type='text' name='player-name' class='text-input' placeholder='Enter Your Initials' /><button class='btn' id='log-score' type='submit'>Submit</button></div>";
     
-    // label for input: 'Enter your initials'
-    
-    // input field
-}
+    document.querySelector('#log-score').addEventListener('click', scoreFormHandler);
+};
 
 // High Scores - list,from localStoarage, go back button , clear high scores button.
+
+
 
 // highScores = [['SE', 22]]
 // 1. SE - 22
@@ -83,11 +100,14 @@ var renderScores = function() {
     var scoreboard = document.querySelector('.game-wrapper');
     scoreboard.innerHTML = "<div class='scoreboard'><h2>High Scores</h2><ul class='score-list'></ul></div>";
     var highScores = JSON.parse(localStorage.getItem('high-scores'));
+    if (!highScores) {
+        highScores = [];
+    }
     var scoreList = document.querySelector('score-list');
     for (var i = 0; i < highScores.length; i++){
         var entry = document.createElement('li');
         entry.className = "scoreboard-item"
-        entry.textContent = (i + 1) + ". " highScores[i][0] + " - " + highScores[i][1];
+        entry.textContent = (i + 1) + ". " + highScores[i][0] + " - " + highScores[i][1];
         scoreList.appendChild(entry);
     }
 }
@@ -141,7 +161,7 @@ var createQuestionEl = function(arr, randArr, index) {
             if (listEl.textContent === answer) {
                 questionNumber++;
                 if (questionNumber >= 6) {
-                    var score = timer;
+                    score = timer;
                     finalResults(score); // function to display results and add player to scoreboard
                 }
                 else {
@@ -152,7 +172,7 @@ var createQuestionEl = function(arr, randArr, index) {
             else {
                 questionNumber++;
                 if (questionNumber >= 6) {
-                    var score = (timer-= 10);
+                    score = (timer-= 10);
                     finalResults(score); // function to display results and add player to scoreboard
                 }
                 else {

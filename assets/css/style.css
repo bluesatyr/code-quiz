@@ -61,7 +61,7 @@ header {
     list-style: none;
 }
 
-.option-list-item, #start {
+.btn {
     width: 200px;
     height: 40px;
     border-radius: 15px;
@@ -76,6 +76,6 @@ header {
     padding-left: 20px;
 }
 
-.option-list-item:hover, #start:hover {
+.btn:hover {
     background-color: purple;
 } 
