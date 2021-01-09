@@ -14,3 +14,41 @@ var questions = {
     q4 : {question: "String values must be enclosed within _______ when being assigned to variables", options: ["commas", "curly brackets", "quotes", "parenthesis"], answer: "quotes"},
     q5 : {question: "A very useful tool for development and debugging for printing content to the debugger is:", options: ["JavaScript", "terminal/bash", "for loops", "console.log"], answer: "console.log"},
 };
+
+// make a `keys array` of questions object keys
+var  questionArray = Object.keys(questions);
+console.log(questionArray);
+
+// Randomize the order of the `keys array`
+var randomize = function(array){
+    for (let i = questionArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * questionArray.length);
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    };
+    
+    return array;
+}
+
+
+// TODO: display question and options (as buttons)
+
+// create questionEl
+var createQuestionEl = function(arr, randArr, index) {
+    // create the quiz elements
+    document.querySelector('.game-wrapper').innerHTML= 
+        "<div class='current-question'><h3 class='question-number'></h3><p class='question-text'></p><div class='options'><ul class='option-list'></ul></div></div>";    
+    // select question-number class       
+    var questionNum = document.querySelector('.question-number');
+    // set question-number text content
+    questionNum.textContent = "Question: " + questionNumber;
+    
+    var questionKey = randArr[index];
+    var questionText =  questions[questionKey]['question'];
+    var qTextEl = document.querySelector('.question-text')
+    qTextEl.textContent = questionText;
+    
+    // create option buttons in a for loop
+};
+
