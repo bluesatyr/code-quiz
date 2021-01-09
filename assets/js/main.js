@@ -32,7 +32,16 @@ var randomize = function(array){
 }
 
 
-// TODO: display question and options (as buttons)
+// create and display  options (as buttons)
+var createButtonEl = function(key, index) {
+    var optionList = document.querySelector('.option-list');
+    var button = document.createElement('li');
+    button.className = "option-list-item";
+    var answer = questions[key]['options'][index];
+    button.textContent = (index+1) + ". " + answer;
+    optionList.appendChild(button);
+}
+
 
 // create questionEl
 var createQuestionEl = function(arr, randArr, index) {
@@ -50,5 +59,8 @@ var createQuestionEl = function(arr, randArr, index) {
     qTextEl.textContent = questionText;
     
     // create option buttons in a for loop
+    for (var i = 0 ; i < 5; i++) {
+        createButtonEl(questionKey, i);
+    }
 };
 
