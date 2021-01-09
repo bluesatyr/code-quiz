@@ -78,7 +78,11 @@ var scoreFormHandler = function(event){
     
     var scoreEntry = [scoreNameInput, myScore];
     highScores.push(scoreEntry);
+    highScores.sort(function(a, b){return b[1]-a[1]});
+    console.log(highScores);
     localStorage.setItem('high-scores', JSON.stringify(highScores));
+    
+    renderScores();
 };
 
 // create final results view
@@ -103,7 +107,7 @@ var renderScores = function() {
     if (!highScores) {
         highScores = [];
     }
-    var scoreList = document.querySelector('score-list');
+    var scoreList = document.querySelector('.score-list');
     for (var i = 0; i < highScores.length; i++){
         var entry = document.createElement('li');
         entry.className = "scoreboard-item"
