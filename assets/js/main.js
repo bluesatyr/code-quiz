@@ -5,7 +5,7 @@ var questionNumber = 1;
 var currentQuestion = document.querySelector('.current-question');
 var timer = 75
 var timerEl = document.querySelector('.time');
-var modalText = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!"
+var introText = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!"
 
 var questions = {
     q1 : {question: "Commonly used data types do not include:", options: ["strings", "booleans", "numbers", "alerts"], answer: "alerts"},
@@ -14,6 +14,15 @@ var questions = {
     q4 : {question: "String values must be enclosed within _______ when being assigned to variables", options: ["commas", "curly brackets", "quotes", "parenthesis"], answer: "quotes"},
     q5 : {question: "A very useful tool for development and debugging for printing content to the debugger is:", options: ["JavaScript", "terminal/bash", "for loops", "console.log"], answer: "console.log"},
 };
+
+// Create intro to prompt game start
+var createIntro = function () {
+    var intro = document.querySelector('.game-wrapper');
+    intro.innerHTML = "<div class='intro'><h1 class='title'>Coding Quiz Challenge</h1><p>"+introText+"</p><button id='start'>Start Quiz</button></div>";
+    
+    // listen for start button click then start the game
+    document.querySelector('#start').on('click', startGame);
+}
 
 // make a `keys array` of questions object keys
 var  questionArray = Object.keys(questions);
@@ -32,7 +41,7 @@ var randomize = function(array){
 }
 
 
-// create and display  options (as buttons)
+// create and display options (as buttons)
 var createButtonEl = function(key, index) {
     var optionList = document.querySelector('.option-list');
     var button = document.createElement('li');
