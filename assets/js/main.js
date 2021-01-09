@@ -1,12 +1,11 @@
 // Declare global variables
-var playerScore = 0;
 var highScore = 0;
 var questionNumber = 1;
 var currentQuestion = document.querySelector('.current-question');
-var timer = 75
+var timer = 75;
 var timerEl = document.querySelector('.time');
 var rightWrong = "";
-var introText = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!"
+
 
 var questions = {
     q1 : {question: "Commonly used data types do not include:", options: ["strings", "booleans", "numbers", "alerts"], answer: "alerts"},
@@ -15,15 +14,6 @@ var questions = {
     q4 : {question: "String values must be enclosed within _______ when being assigned to variables.", options: ["commas", "curly brackets", "quotes", "parenthesis"], answer: "quotes"},
     q5 : {question: "A very useful tool for development and debugging for printing content to the debugger is:", options: ["JavaScript", "terminal/bash", "for loops", "console.log"], answer: "console.log"},
 };
-
-// Create intro to prompt game start
-var createIntro = function () {
-    var intro = document.querySelector('.game-wrapper');
-    intro.innerHTML = "<div class='intro'><h1 class='title'>Coding Quiz Challenge</h1><p>"+introText+"</p><button id='start'>Start Quiz</button></div>";
-    
-    // listen for start button click then start the game
-    document.querySelector('#start').addEventListener('click', startQuiz);
-}
 
 // make a `keys array` of questions object keys
 var  questionArray = Object.keys(questions);
@@ -37,9 +27,8 @@ var randomize = function(array){
         array[i] = array[j];
         array[j] = temp;
     };
-    
     return array;
-}
+};
 
 
 // create and display options (as buttons)
@@ -54,6 +43,7 @@ var createButtonEl = function(key, index) {
     optionList.appendChild(button);
 }
 
+// depending upon a right or wrong answer: adjust timer & display result.
 var result = function(clicked) {
     if (clicked === "wrong") {
         var resultDiv = document.querySelector('.previous-result')
@@ -73,10 +63,22 @@ var result = function(clicked) {
         resultEl.innerHTML = "<hr><h3>Correct!</h3>";
         resultDiv.appendChild(resultEl);
     }
+};
+
+// create final results view
+var finalResults = function (score) {
+    var intro = document.querySelector('.game-wrapper');
+    intro.innerHTML = "<div class='intro'><h1 class='title'>Coding Quiz Challenge</h1><p>You have completed the Quiz! Your Score is " + score + "</p><button id=''>Start Quiz</button></div>";
+    
+    
 }
+
+
+
 
 // create questionEl
 var createQuestionEl = function(arr, randArr, index) {
+    
     // create the quiz elements
     document.querySelector('.game-wrapper').innerHTML= 
         "<div class='current-question'><h3 class='question-number'></h3><p class='question-text'></p><div class='options'><ul class='option-list'></ul></div></div><div class='previous-result'></div>";    
@@ -85,8 +87,9 @@ var createQuestionEl = function(arr, randArr, index) {
     // set question-number text content
     questionNum.textContent = "Question: " + questionNumber;
     
-    
+    // get the key name from the randomized array
     var questionKey = randArr[index];
+    // use that key to get the values from the questions object
     var questionText =  questions[questionKey]['question'];
     var qTextEl = document.querySelector('.question-text')
     qTextEl.textContent = questionText;
@@ -96,6 +99,7 @@ var createQuestionEl = function(arr, randArr, index) {
         createButtonEl(questionKey, i); 
     };
     
+    // check status of last question
     if (rightWrong === "right") {
         result("right");
     }
@@ -104,32 +108,54 @@ var createQuestionEl = function(arr, randArr, index) {
     }
     
     var options = document.querySelector(".options");
+    
+    // function when an option is clicked
     options.addEventListener("click", function(event) {
-        var listEl = event.target.closest(".option-value");
-        console.log(listEl);
-        
-        var answer = questions[questionKey]['answer'];
-        
-        console.log(answer);
-        if (listEl.textContent === answer) {
-            questionNumber++;
-            rightWrong = "right";
-            createQuestionEl(questions, randArr, (questionNumber - 1));
+         
+            var listEl = event.target.closest(".option-value");
+            console.log(listEl);
             
-        }
-        else {
-            questionNumber++;
-            rightWrong = "wrong";
-            createQuestionEl(questions, randArr, (questionNumber - 1));
-        }
+            var answer = questions[questionKey]['answer'];
+            
+            console.log(answer);
+            
+            
+            // update the rightWrong variable to be used during next call of createQuestionEl function
+            
+            if (listEl.textContent === answer) {
+                questionNumber++;
+                if (questionNumber >= 6) {
+                    var score = timer;
+                    finalResults(score); // function to display results and add player to scoreboard
+                }
+                else {
+                    rightWrong = "right";
+                    createQuestionEl(questions, randArr, (questionNumber - 1));
+                }
+            }
+            else {
+                questionNumber++;
+                if (questionNumber >= 6) {
+                    var score = timer;
+                    finalResults(score); // function to display results and add player to scoreboard
+                }
+                else {
+                    rightWrong = "wrong";
+                    createQuestionEl(questions, randArr, (questionNumber - 1));
+                }
+            }
         
     });
 };
 
+// wrapper for createQuestionEl to be called within other functions
+/*
 var renderQuestions = function (randQuestions) {
         createQuestionEl(questions, randQuestions, (questionNumber - 1));
-}
-// divide into two functions: one to create flow of the game and the other to render the questions
+} 
+*/
+
+// divide into two functions: one to create flow of the game and the other to render the questions??
 
 var startQuiz = function() {
     var questionNumber = 1;
@@ -138,7 +164,7 @@ var startQuiz = function() {
     var randQuestions = randomize(questionArray);
     console.log(randQuestions);
     
-    renderQuestions(randQuestions);
+    createQuestionEl(questions, randQuestions, (questionNumber - 1));
          
      var startTimer = setInterval(function() {
       if (timer > 1){
@@ -148,8 +174,7 @@ var startQuiz = function() {
           timerEl.textContent = timer;
           timer--;
       } else {
-          window.alert('Time is up!!');
-          timerEl.textContent = ""; //change to say time is up
+          timerEl.textContent = "The time has expired"; //change to say time is up
           clearInterval(startTimer); // stop the timer
           //displayMessage();
           // stop the timer
@@ -168,5 +193,6 @@ var startQuiz = function() {
     } */
 }
 
+document.querySelector('#start').addEventListener('click', startQuiz);
 
 
