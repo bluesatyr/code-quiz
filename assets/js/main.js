@@ -98,7 +98,7 @@ var finalResults = function (score) {
     document.querySelector('#log-score').addEventListener('click', scoreFormHandler);
 };
 
-// retrieves high scores and renders to view
+// retrieves high scores and renders to scoreboard view
 var renderScores = function() {
     var scoreboard = document.querySelector('.game-wrapper');
     scoreboard.innerHTML = "<div class='scoreboard'><h2>High Scores</h2><ul class='score-list'></ul><div class='actions'></div></div>";
@@ -240,11 +240,8 @@ var startQuiz = function() {
             timer--;
         } 
         else if (timer<0 || timerOn===false) {
-            timerEl.textContent = "The time has expired"; //change to say time is up
-            clearInterval(startTimer); // stop the timer
-            //displayMessage();
-            // stop the timer
-            // Call a function to make timer the final score     
+            timerEl.textContent = "The time has expired"; 
+            clearInterval(startTimer);    
         }
         }, 1000);
     
@@ -263,4 +260,5 @@ var createIntro = function () {
 
 document.querySelector('.high-score').addEventListener('click', renderScores);
 
+// render first view on page load
 createIntro();
