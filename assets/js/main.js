@@ -140,7 +140,7 @@ var renderScores = function() {
     
 
 
-// create questionEl
+// create randomized questionEl 
 var createQuestionEl = function(arr, randArr, index) {
     
     // create the quiz elements

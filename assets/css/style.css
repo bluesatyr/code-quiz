@@ -9,16 +9,21 @@
 
 header {
     height: 120px;
-    display: flex;
     justify-content: space-between;
     align-content: center;
-    padding: 50px 100px 50px 100px;
+    padding: 50px;
     color: rebeccapurple;
     margin-bottom: 15px;
+    
 }
 
-.player-score, .high-score {
-    flex: 1;
+.timer {
+    float: right;
+    text-align: right;
+}
+
+.high-score {
+    float:left;
 }
 
 .high-score h2:hover {
@@ -46,7 +51,7 @@ header {
 /* main content styles */
 
 .game-wrapper {
-    width: 900px;
+    width: 80%;
     margin: auto;
     display: flex;
     flex-wrap: wrap;
@@ -131,3 +136,26 @@ input {
 .go-back {
     margin-right: 25px;
 }
+
+/* Mobile Styles */
+@media screen and (max-width: 585px) {
+    header {
+        flex-wrap: wrap;
+    }
+    
+    .high-score {
+        font-size: .85em;
+        flex: 3;
+        margin-bottom: 5px;
+        width: 100%;
+    }
+    
+    .timer {
+        float: none;
+        width: 100%;
+        text-align: left;
+    }
+    
+    .game-wrapper {
+        margin-top: 30px;
+    }
