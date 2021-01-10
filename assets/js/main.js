@@ -2,6 +2,7 @@
 var questionNumber = 1;
 var currentQuestion = document.querySelector('.current-question');
 var timer = 75;
+var timerOn = false; 
 var timerEl = document.querySelector('.time');
 var rightWrong = "";
 var score = 0;
@@ -36,6 +37,8 @@ var createButtonEl = function(key, index) {
     var button = document.createElement('li');
     button.className = "option-list-item btn";
     var answer = questions[key]['options'][index];
+    button.setAttribute('data-value', answer);
+    console.log(button.dataset.value);
     // data attribute of answer?
     var buttonText = (index+1) + ". ";
     button.innerHTML = buttonText + "<span class='option-value'>" + answer + "</span";
@@ -64,6 +67,7 @@ var result = function(clicked) {
     }
 };
 
+// handles user input and adds to localStorage
 var scoreFormHandler = function(event){
     console.log(event);
     event.preventDefault();
@@ -87,19 +91,14 @@ var scoreFormHandler = function(event){
 
 // create final results view
 var finalResults = function (score) {
+    timer = 0;
     var intro = document.querySelector('.game-wrapper');
     intro.innerHTML = "<div class='intro'><h1 class='title'>Coding Quiz Challenge</h1><p>You have completed the Quiz! Your Score is " + score + "</p><input type='text' name='player-name' class='text-input' placeholder='Enter Your Initials' /><button class='btn' id='log-score' type='submit'>Submit</button></div>";
-    
+    timerOn = false;
     document.querySelector('#log-score').addEventListener('click', scoreFormHandler);
 };
 
-// High Scores - list,from localStoarage, go back button , clear high scores button.
-
-
-
-// highScores = [['SE', 22]]
-// 1. SE - 22
-
+// retrieves high scores and renders to view
 var renderScores = function() {
     var scoreboard = document.querySelector('.game-wrapper');
     scoreboard.innerHTML = "<div class='scoreboard'><h2>High Scores</h2><ul class='score-list'></ul></div>";
@@ -151,9 +150,9 @@ var createQuestionEl = function(arr, randArr, index) {
     
     // function when an option is clicked
     options.addEventListener("click", function(event) {
-         
-            var listEl = event.target.closest(".option-value");
-            console.log(listEl);
+            var listEl = event.target.closest(".option-list-item");
+            var listElValue = listEl.dataset.value
+            console.log(listElValue);
             
             var answer = questions[questionKey]['answer'];
             
@@ -162,10 +161,12 @@ var createQuestionEl = function(arr, randArr, index) {
             
             // update the rightWrong variable to be used during next call of createQuestionEl function
             
-            if (listEl.textContent === answer) {
+            if (listElValue === answer) {
                 questionNumber++;
                 if (questionNumber >= 6) {
                     score = timer;
+                    timerOn = false;
+                    timerEl.textContent = "Final Score: " + score;
                     finalResults(score); // function to display results and add player to scoreboard
                 }
                 else {
@@ -177,6 +178,8 @@ var createQuestionEl = function(arr, randArr, index) {
                 questionNumber++;
                 if (questionNumber >= 6) {
                     score = (timer-= 10);
+                    timerOn = false;
+                    timerEl.textContent = "Final Score: " + score;
                     finalResults(score); // function to display results and add player to scoreboard
                 }
                 else {
@@ -199,33 +202,39 @@ var startQuiz = function() {
     
     createQuestionEl(questions, randQuestions, (questionNumber - 1));
          
-     var startTimer = setInterval(function() {
-      if (timer > 1){
-          timerEl.textContent = timer; 
-          timer--;
-      } else if (timer === 1){
-          timerEl.textContent = timer;
-          timer--;
-      } else {
-          timerEl.textContent = "The time has expired"; //change to say time is up
-          clearInterval(startTimer); // stop the timer
-          //displayMessage();
-          // stop the timer
-          // Call a function to make timer the final score     
-      }
-    }, 1000);
+    var startTimer = setInterval(function() {
+        timerOn = true;
+        
+        if (timer > 1){
+            timerEl.textContent = timer; 
+            timer--;
+        } 
+        else if (timer === 1){
+            timerEl.textContent = timer;
+            timer--;
+        } 
+        else if (timer<0 || timerOn===false) {
+            timerEl.textContent = "The time has expired"; //change to say time is up
+            clearInterval(startTimer); // stop the timer
+            //displayMessage();
+            // stop the timer
+            // Call a function to make timer the final score     
+        }
+        }, 1000);
     
-    
-    
-    
-    /* Loop through questions one by one
-    for (var i = 0; i < questions.length; i++) {
-        createQuestionEl(questions, randQuestions, i);
-        // createOptionEls
-        questionNumber++;
-    } */
-}
+       
+};
 
-document.querySelector('#start').addEventListener('click', startQuiz);
+// initial view
+var createIntro = function () {
+    var intro = document.querySelector('.game-wrapper');
+    intro.innerHTML = "<div class='intro'><h1 class='title'>Coding Quiz Challenge</h1><p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!</p><button id='start' class='btn'>Start Quiz</button></div>";
+    
+    // listen for start button click then start the game
+    document.querySelector('#start').addEventListener('click', startQuiz);
+};
 
 
+document.querySelector('.high-score').addEventListener('click', renderScores);
+
+createIntro();

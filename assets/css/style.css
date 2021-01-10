@@ -13,16 +13,17 @@ header {
     justify-content: space-between;
     align-content: center;
     padding: 50px 100px 50px 100px;
-    background-color: rebeccapurple;
-    color: #fff;
+    color: rebeccapurple;
     margin-bottom: 15px;
 }
-
 
 .player-score, .high-score {
     flex: 1;
 }
 
+.high-score h2:hover {
+    color: violet;
+}
 
 /* main content styles */
 
@@ -47,8 +48,11 @@ header {
     width: 70%;
     margin-right: 15%;
     margin-left: 15%;
-    background-color: aqua;
     text-align: center;
+}
+
+.intro p {
+    padding: 20px 0;
 }
 
 /* answer option styles */
@@ -79,3 +83,27 @@ header {
 .btn:hover {
     background-color: purple;
 } 
+
+.previous-result {
+    font-style: italic;
+    color: grey;
+}
+
+hr {
+    margin: 15px 0;
+}
+
+
+
+.score-list {
+    list-style: none;
+}
+
+.score-list li {
+    padding: 15px 10px;
+    font-size: 1.2em;
+}
+
+.score-list li:nth-child(even) {
+    background-color: lavender;
+}
