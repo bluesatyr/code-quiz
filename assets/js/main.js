@@ -101,7 +101,7 @@ var finalResults = function (score) {
 // retrieves high scores and renders to view
 var renderScores = function() {
     var scoreboard = document.querySelector('.game-wrapper');
-    scoreboard.innerHTML = "<div class='scoreboard'><h2>High Scores</h2><ul class='score-list'></ul></div>";
+    scoreboard.innerHTML = "<div class='scoreboard'><h2>High Scores</h2><ul class='score-list'></ul><div class='actions'></div></div>";
     var highScores = JSON.parse(localStorage.getItem('high-scores'));
     if (!highScores) {
         highScores = [];
@@ -113,7 +113,32 @@ var renderScores = function() {
         entry.textContent = (i + 1) + ". " + highScores[i][0] + " - " + highScores[i][1];
         scoreList.appendChild(entry);
     }
-}
+    
+    // button parent container
+    var actionDiv = document.querySelector('.actions');
+    
+    // go back button
+    var backButton = document.createElement('div');
+    backButton.className = "go-back btn";
+    backButton.textContent = "Go Back";
+    actionDiv.appendChild(backButton);
+    
+    // clear scores button
+    var clearButton = document.createElement('div');
+    clearButton.className = "clear btn";
+    clearButton.textContent = "Clear High Scores";
+    actionDiv.appendChild(clearButton);
+    
+    document.querySelector('.go-back').addEventListener('click', createIntro);
+    document.querySelector('.clear').addEventListener('click', function() {
+        var highScores = [];
+        localStorage.setItem('high-scores', JSON.stringify(highScores));
+        renderScores();
+    });
+};
+    
+    
+
 
 // create questionEl
 var createQuestionEl = function(arr, randArr, index) {
@@ -194,7 +219,8 @@ var createQuestionEl = function(arr, randArr, index) {
 
 // start the quiz
 var startQuiz = function() {
-    var questionNumber = 1;
+    timer = 75;
+    questionNumber = 1;
     var questionArray = Object.keys(questions);
     console.log(questionArray);
     var randQuestions = randomize(questionArray);
