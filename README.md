@@ -1,9 +1,5 @@
 # JavaScriptionary - a Coding Quiz
 
-
-https://bluesatyr.github.io/code-quiz/
-
-
 ## Description
 A short timed quiz on coding
 
